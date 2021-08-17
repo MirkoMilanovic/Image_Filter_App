@@ -1,0 +1,44 @@
+Uputstvo za koriscenje programa "image-filter"
+
+
+- fajl "image-filter.rar' treba otpakovati na proizvoljnoj lokaciju na disku racunara (pozeljno C disk)
+
+- u otpakovanom folderu se medju fajlovima nalazi "image-filter.exe" koji sluzi za pokretanje programa 
+  (pozeljno je napraviti Shortcut na Desktopu racunara).
+
+- u okviru foldera se nalazi i fajl "default_directory.txt" gde treba prekopirati i zapamtiti putanju ka 
+  direktorijumu koji ce se najvise koristiti, koji se postavlja kao default odmah po otvaranju programa.
+
+- u okviru foldera je i fajl "images_metadata.txt" koji ima funkciju baze podataka ili cache memorije. 
+  Svaka promena radnog direktorijuma automatski vrsi pretragu svih fotografija (fajlova u .jpg formatu) 
+  u tom direktorijumu i subdirektorijumima, za svaku fotografiju se citaju metapodaci datuma nastanka i 
+  kljucne reci. Ti metapodaci sa putanjama svake fotografije se smestaju u pomenutom fajlu.
+
+- Svaki prvi izbor do tada nekoriscenog direktorijuma zahteva malo cekanja dok se podaci pretraze i 
+  metapodaci izvuku pa smeste u "images_metadata.txt". Naredni izbor tih direktorijuma je brzi, posto se
+  samo traze metapodaci o fotografijama koje su u medjuvremenu dodate u direktorijum, a brisu se 
+  metapodaci obrisanih fotografija.
+
+- Posto se podaci fotografija cuvaju kao njihova putanja na disku, pozeljno je (ne i obavezno), da se 
+  isti USB slot koristi za prikljucenje eksternih drajvova, kako se putanje ne bi ponavljale za razlicite
+  drivove E, F, G... Sadrzaj cache fajla se moze obrisati, pa ce se svakako ponovno kreirasti automatski 
+  izborima direktorijuma.
+
+- kod izbora kljucnih reci za pretragu mogu se koristiti proizvoljno velika ili mala slova, a odvojene 
+  mogu biti razmakom, "," ili ";". Polje moze ostati prazno, gde ce se izlistati sve slike.
+
+- filtriranje po vremenu nastanka fotografija moze se uneti samo godina (YYYY), ili dvocifreno 
+  naznacen mesec pa godina (MMYYYY) uz proizvoljno koriscenje "." ili ",". Polje moze ostati prazno.
+
+- Pritiskom odgovarajuceg dugmeta vrsi se pretraga, prikazuje se lista naziva filtriranih fotografija.
+
+- Moguce je selektovati vise fotografija na listi (pa ih otvoriti u Photoshopu klikom na odgovarajuce 
+  dugme)
+
+- poslednja fotografija koja je kliknuta na listi je podvucena, ona se moze pregledati u Preview sekciji
+  i otvoriti u Exploreru (klikom na odgovarajuce dugme).
+
+Srecno koriscenje,
+Mirko Milanovic
+
+
