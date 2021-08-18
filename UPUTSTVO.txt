@@ -32,11 +32,9 @@ Uputstvo za koriscenje programa "image-filter"
 
 - Pritiskom odgovarajuceg dugmeta vrsi se pretraga, prikazuje se lista naziva filtriranih fotografija.
 
-- Moguce je selektovati vise fotografija na listi (pa ih otvoriti u Photoshopu klikom na odgovarajuce 
-  dugme)
+- Moguce je selektovati vise fotografija na listi (pa ih otvoriti u Photoshopu ili pronaci u Exploreru   klikom na odgovarajuce dugme).
 
-- poslednja fotografija koja je kliknuta na listi je podvucena, ona se moze pregledati u Preview sekciji
-  i otvoriti u Exploreru (klikom na odgovarajuce dugme).
+- Moguce je izvrsiti pregled fotografija u Preview sekciji, odabirom na opciju "one" pregleda se jedna     fotografija, a izborom opcije "multiple", prikazuju se thumbnailovi svih slika.
 
 Srecno koriscenje,
 Mirko Milanovic

@@ -7,6 +7,7 @@ from tkinter import filedialog
 import subprocess
 import os
 import iptcinfo3
+from os import walk
 import win32com.client
 from PIL import Image, ImageTk
 import ast
@@ -94,15 +95,6 @@ class Window:
         self.image_count_label = Label(window, textvariable=self.image_count, font=("Calibri Bold", 12), fg='#993399')
         self.image_count_label.grid(row=16, column=0, sticky=W+S, padx=5)
 
-        self.img_start = Image.open('img/camera-image.png')
-        self.tkimage_start = ImageTk.PhotoImage(self.img_start)
-        self.previewed_image_label = Label(window, image=self.tkimage_start)
-        self.previewed_image_label.grid(row=7, column=1)
-
-        self.previewed_image_name_label = Label(window, text='', anchor="w", fg='#993399', font=("Arial Bold", 12), justify=RIGHT)
-        self.previewed_image_name_label.grid(row=6, column=1, sticky=W+E, padx=(140, 5))
-
-
         # Button - directory
         self.dir_icon = Image.open("img/directory-icon.png")
         self.dir_icon_render = ImageTk.PhotoImage(self.dir_icon)
@@ -127,6 +119,22 @@ class Window:
         self.b4 = Button(window, image=self.photoshop_icon_render, width=45, command=self.open_photoshop)
         self.b4.grid(row=16, column=1, sticky=E, padx=5, pady=2)
 
+        # Radio Button - preview one or multiple
+        self.var = IntVar(window, value=1)
+        self.preview_radio1 = Radiobutton(window, text="one", font=("Calibri Bold", 13), variable=self.var, value=1).grid(row=6, column=1, sticky=E+S, padx=(0, 100))
+        self.preview_radio2 = Radiobutton(window, text="multiple", font=("Calibri Bold", 13), variable=self.var, value=2).grid(row=6, column=1, sticky=E+S)
+
+        # Labels for image preview one
+        self.img_start = Image.open('img/camera-image.png')
+        self.tkimage_start = ImageTk.PhotoImage(self.img_start)
+        self.previewed_image_label = Label(window, image=self.tkimage_start)
+        self.previewed_image_name_label = Label(window, text='', anchor="w", fg='#993399', font=("Arial Bold", 12), justify=RIGHT)
+
+        # Text - image preview multiple
+        self.preview_grid_text = Text(window)
+        self.vsb = Scrollbar(window, orient=VERTICAL, command=self.preview_grid_text.yview)
+        self.preview_grid_text.configure(yscrollcommand=self.vsb.set)
+
         # Program name
         window.wm_title("Image filtering by Mirko M.")
 
@@ -134,7 +142,7 @@ class Window:
         window.grid_columnconfigure(1,weight=1)
         window.grid_rowconfigure(7,weight=1)
 
-        # Show selected image and label
+        # Show last image and label
         self.images_listbox.bind("<<ListboxSelect>>", self.on_select)
 
         # Create images metadata
@@ -238,17 +246,53 @@ class Window:
             self.images_listbox.insert(END, image)
         self.image_count.set("{ " + str(len(self.image_list)) + " images found }")
 
+    def image_path(self, image):
+        for root, dirs, files in walk(self.directory):
+            self.full_folder_path = root
+            if root[-1] == '/':
+                return root + image
+            else:
+                return root + '/' + image
+
     def on_select(self, evt):
-        active_image = self.images_listbox.get(ANCHOR)
-        active_image_path = ''
-        for file_path in self.all_images_metadata_dict.keys():
-            if file_path.endswith(active_image):
-                active_image_path = file_path
-        self.img = Image.open(active_image_path)
-        self.img.thumbnail((500,400))
-        self.tkimage = ImageTk.PhotoImage(self.img)
-        self.previewed_image_label['image'] = self.tkimage
-        self.previewed_image_name_label['text'] = active_image
+        if self.var.get() == 1:
+            try:
+                self.preview_grid_text.grid_forget()
+                self.previewed_image_label.grid(row=7, column=1)
+                self.vsb.grid_forget()
+                self.previewed_image_name_label.grid(row=6, column=1, sticky=W+E+S, padx=(145, 160))
+            except AttributeError:
+                pass
+
+            active_image = self.images_listbox.get(ANCHOR)
+            active_image_path = ''
+            for file_path in self.all_images_metadata_dict.keys():
+                if file_path.endswith(active_image):
+                    active_image_path = file_path
+            self.img = Image.open(active_image_path)
+            self.img.thumbnail((500,400))
+            self.tkimage = ImageTk.PhotoImage(self.img)
+            self.previewed_image_label['image'] = self.tkimage
+            self.previewed_image_name_label['text'] = active_image
+        else:
+            try:
+                self.previewed_image_label.grid_forget()
+                self.previewed_image_name_label.grid_forget()
+                self.preview_grid_text.grid(row=7, column=1, sticky=N+S+E+W, padx=(15, 5))
+                self.vsb.grid(row=7, column=1, sticky=N+S+E, padx=(0, 5))
+            except AttributeError:
+                pass
+
+            selection = self.images_listbox.curselection()
+            self.preview_grid_text.delete('1.0', END)
+            for i in selection:
+                photo = Image.open(self.image_fullpath_list[i])
+                photo.thumbnail((100,100))
+                thumbnail = ImageTk.PhotoImage(photo)
+        
+                one_picture_label = Label(self.preview_grid_text,image=thumbnail, text=self.image_list[i], wraplength=120, compound=TOP, width=120, height=130, font=("Calibri Bold", 10), fg='#993399', bg='#ffffff')
+                one_picture_label.image = thumbnail
+                self.preview_grid_text.window_create("end", window=one_picture_label)
 
     def image_in_explorer(self):
         selection = self.images_listbox.curselection()
@@ -263,6 +307,6 @@ class Window:
             psApp.Open(self.image_fullpath_list[i])
 
 window = Tk()
-window.geometry("900x900")
+window.geometry("920x900")
 Window(window)
 window.mainloop()
